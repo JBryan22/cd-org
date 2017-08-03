@@ -63,6 +63,27 @@ namespace CdOrg.Controllers
       return View("artistDetail", model);
     }
 
+    [HttpGet("/search")]
+    public ActionResult Search()
+    {
+      return View();
+    }
 
+    [HttpPost("/results")]
+    public ActionResult SearchResult()
+    {
+      Dictionary<string, object> results = new Dictionary<string, object>();
+      string searchStr = (Request.Form["artist"]).ToString().ToLower();
+      foreach(Artist name in Artist.GetAllArtist())
+      {
+        if (name.GetName().ToLower().Contains(searchStr))
+        {
+          results.Add(name.GetName(), name.GetCDs());
+        }
+      }
+
+      return View("results", results);
+
+    }
   }
 }
